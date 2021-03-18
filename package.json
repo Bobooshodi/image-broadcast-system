@@ -1,0 +1,64 @@
+{
+  "name": "image_processor_api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "tsc": "tsc",
+    "dev": "nodemon server.js",
+    "migrate": "ts-node ./node_modules/typeorm/cli.js migration:run",
+    "migration:create": "ts-node ./node_modules/typeorm/cli.js migration:create -n Initial",
+    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'src/tests/**/*.ts'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bobooshodi/image-processor-api.git"
+  },
+  "author": "Bobooshodi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Bobooshodi/image-processor-api/issues"
+  },
+  "homepage": "https://github.com/Bobooshodi/image-processor-api#readme",
+  "dependencies": {
+    "@nartc/automapper": "^7.0.4",
+    "body-parser": "^1.19.0",
+    "cloudinary": "^1.23.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.8.0",
+    "express-with-json": "0.0.6",
+    "glob": "^7.1.6",
+    "inversify": "^5.0.5",
+    "jszip": "^3.5.0",
+    "multer": "^1.4.2",
+    "multer-storage-cloudinary": "^4.0.0",
+    "mysql": "^2.18.1",
+    "reflect-metadata": "^0.1.13",
+    "sharp": "^0.26.3",
+    "streamifier": "^0.1.1",
+    "typeorm": "^0.2.29"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.19.0",
+    "@types/chai": "^4.2.14",
+    "@types/cors": "^2.8.9",
+    "@types/express": "^4.17.9",
+    "@types/glob": "^7.1.3",
+    "@types/mocha": "^8.2.0",
+    "@types/multer": "^1.4.5",
+    "@types/mysql": "^2.15.16",
+    "@types/node": "^14.14.14",
+    "@types/nodemon": "^1.19.0",
+    "@types/sharp": "^0.26.1",
+    "@types/sqlite3": "^3.1.6",
+    "chai": "*",
+    "chai-http": "^4.3.0",
+    "mocha": "*",
+    "nodemon": "^2.0.6",
+    "ts-mockito": "^2.6.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.3"
+  }
+}

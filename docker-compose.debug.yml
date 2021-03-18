@@ -1,0 +1,47 @@
+version: "3.4"
+
+services:
+  api:
+    image: message-broadcast-api
+    depends_on:
+      db:
+        condition: service_healthy
+    build:
+      context: .
+      dockerfile: ./docker/api/Dockerfile
+    environment:
+      NODE_ENV: development
+    env_file:
+      - ./.env.prod
+    ports:
+      - 3000:3000
+    networks:
+      - internal
+      - private
+
+  db:
+    container_name: message-broadcast-api-db
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      - ./docker/db/data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    networks:
+      - internal
+    ports:
+      - 3389:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: 72f388370638f212
+      MYSQL_DATABASE: message_broadcast_api
+      MYSQL_USER: message_broadcast_api_user
+      MYSQL_PASSWORD: 2c494db14dbb7aa9
+
+networks:
+  internal:
+    external: false
+  private:
+    external: true
