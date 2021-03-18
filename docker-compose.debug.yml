@@ -40,6 +40,14 @@ services:
       MYSQL_USER: message_broadcast_api_user
       MYSQL_PASSWORD: 2c494db14dbb7aa9
 
+  disque:
+    image: quay.io/tripviss/tripviss-disque:disque
+    networks:
+      - private
+    restart: always
+    volumes:
+      - ./docker/disque/data:/data:rw
+
 networks:
   internal:
     external: false

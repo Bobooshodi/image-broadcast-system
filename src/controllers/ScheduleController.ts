@@ -7,7 +7,7 @@ import container from "../service-container/inversify.config";
 import { ServiceInterfaceTypes } from "../service-container/ServiceTypes";
 import { ScheduleServiceInterface } from "../services";
 
-var scheduleService = container.get<ScheduleServiceInterface>(
+const scheduleService = container.get<ScheduleServiceInterface>(
   ServiceInterfaceTypes.ServiceTypes.sheduleService
 );
 

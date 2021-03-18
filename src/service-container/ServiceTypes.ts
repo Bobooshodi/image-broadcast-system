@@ -1,7 +1,9 @@
 export let ServiceInterfaceTypes = {
   ServiceTypes: {
-    sheduleService: Symbol("SheduleService"),
-    recipientListService: Symbol("RecipientListService"),
+    jobService: Symbol("JobServiceInterface"),
+    loggerService: Symbol("LoggerServiceInterface"),
+    recipientListService: Symbol("RecipientListServiceInterface"),
+    sheduleService: Symbol("SheduleServiceInterface"),
   },
   RepositoryTypes: {},
 };

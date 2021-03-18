@@ -2,6 +2,7 @@ import { createConnection } from "typeorm";
 import express from "express";
 import withJson from "express-with-json";
 import { pagination } from "typeorm-pagination";
+import { default as Pino } from "pino-http";
 import glob from "glob";
 import path from "path";
 import bodyParser from "body-parser";
@@ -13,14 +14,33 @@ import {
   RecipientListMappingProfile,
   ScheduleMappingProfile,
 } from "./data-mapping-profiles";
+import container from "./service-container/inversify.config";
+import { JobServiceInterface } from "./services";
+import { ServiceInterfaceTypes } from "./service-container/ServiceTypes";
+import config from "../config";
 
 const port = 3000;
+const jobService = container.get<JobServiceInterface>(
+  ServiceInterfaceTypes.ServiceTypes.jobService
+);
 
 function findAllControllers() {
   return glob
     .sync(path.join(__dirname, "controllers/*"), { absolute: true })
     .map((controllerPath) => require(controllerPath).default)
     .filter((applyController) => applyController);
+}
+
+function connectToDisqueServer() {
+  jobService.connect(
+    { host: config.DISQUE_HOST, port: config.DISQUE_PORT },
+    (error) => {
+      console.error(error);
+    },
+    () => {
+      console.log("Disque Server is Up and Ready to accept jobs");
+    }
+  );
 }
 
 function initializeMappings() {
@@ -61,6 +81,8 @@ export async function bootstrap() {
   findAllControllers().map((applyController) => applyController(app));
   app.use(entityNotFoundErrorHandler);
   app.use(errorHandler);
+
+  connectToDisqueServer();
 
   app.listen(port, () => console.log("Listening on port", port));
 
