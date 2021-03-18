@@ -5,7 +5,6 @@ import { RecipientListEntity } from "./RecipientListEntity";
 
 @Entity({ name: "recipientListItems" })
 export class RecipientListItemEntity extends IdentityEntity {
-  @AutoMap()
   @ManyToOne(() => RecipientListEntity, (master) => master.recipients)
   masterList: RecipientListEntity;
 

@@ -38,7 +38,8 @@
     "reflect-metadata": "^0.1.13",
     "sharp": "^0.26.3",
     "streamifier": "^0.1.1",
-    "typeorm": "^0.2.29"
+    "typeorm": "^0.2.29",
+    "typeorm-pagination": "^2.0.1"
   },
   "devDependencies": {
     "@types/body-parser": "^1.19.0",

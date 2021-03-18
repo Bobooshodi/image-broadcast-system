@@ -12,7 +12,10 @@ export class RecipientListEntity extends IdentityEntity {
   @AutoMap()
   @OneToMany(
     () => RecipientListItemEntity,
-    (recipientLists) => recipientLists.masterList
+    (recipientLists) => recipientLists.masterList,
+    {
+      cascade: true,
+    }
   )
   recipients: RecipientListItemEntity[];
 }

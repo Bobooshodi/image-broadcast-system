@@ -1,6 +1,7 @@
 import { createConnection } from "typeorm";
 import express from "express";
 import withJson from "express-with-json";
+import { pagination } from "typeorm-pagination";
 import glob from "glob";
 import path from "path";
 import bodyParser from "body-parser";
@@ -24,7 +25,7 @@ function findAllControllers() {
 
 function initializeMappings() {
   Mapper.addProfile(ScheduleMappingProfile);
-  // Mapper.addProfile(RecipientListMappingProfile);
+  Mapper.addProfile(RecipientListMappingProfile);
   Mapper.addProfile(RecipientListItemMappingProfile);
 }
 
@@ -53,6 +54,7 @@ export async function bootstrap() {
   await createConnection();
   const app = withJson(express());
   app.use(bodyParser.json());
+  app.use(pagination);
   app.use(cors());
 
   initializeMappings();

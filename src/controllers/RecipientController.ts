@@ -5,10 +5,10 @@ import { validationResult } from "express-validator";
 import container from "../service-container/inversify.config";
 
 import { ServiceInterfaceTypes } from "../service-container/ServiceTypes";
-import { ScheduleServiceInterface } from "../services";
+import { RecipientListServiceInterface } from "../services";
 
-var scheduleService = container.get<ScheduleServiceInterface>(
-  ServiceInterfaceTypes.ServiceTypes.sheduleService
+var recipientService = container.get<RecipientListServiceInterface>(
+  ServiceInterfaceTypes.ServiceTypes.recipientListService
 );
 
 export async function create(req: any) {
@@ -18,9 +18,9 @@ export async function create(req: any) {
       throw new JsonErrorResponse({ errors: errors.array() });
     }
 
-    const { message, date, recipientList } = req.body;
+    const { name, recipients } = req.body;
 
-    return scheduleService.createAndSave(message, date, recipientList);
+    return await recipientService.createAndSave(name, recipients);
   } catch (error) {
     console.error(error);
     throw new JsonErrorResponse({ error: "some error occured" });
@@ -30,31 +30,38 @@ export async function create(req: any) {
 export async function remove(req: express.Request) {
   const { id } = req.params;
 
-  const res = await scheduleService.delete(id);
+  const res = await recipientService.delete(id);
   return { ok: res };
 }
 
 export async function get(req: express.Request) {
   const { id } = req.params;
 
-  return await scheduleService.getById(id);
+  return await recipientService.getById(id);
 }
 
 export async function getAll(req: express.Request) {
-  return await scheduleService.getAllPaginated();
+  return await recipientService.getAllPaginated();
+}
+
+export async function getRecipientsList(req: express.Request) {
+  const { id } = req.params;
+
+  return await recipientService.getPaginatedRecipientsList(id);
 }
 
 export async function update(req: express.Request) {
   const { id } = req.params;
 
-  const existingImage = await scheduleService.getById(id);
+  const existingImage = await recipientService.getById(id);
 
-  return await scheduleService.update(existingImage);
+  return await recipientService.update(existingImage);
 }
 
 export default (app: IExpressWithJson) => {
-  app.postJson("/schedules", create);
-  app.deleteJson("/schedules/:id", remove);
-  app.getJson("/schedules", getAll);
-  app.getJson("/schedules/:id", get);
+  app.postJson("/recipients", create);
+  app.deleteJson("/recipients/:id", remove);
+  app.getJson("/recipients", getAll);
+  app.getJson("/recipients/:id", get);
+  app.getJson("/recipients/:id/list", getRecipientsList);
 };

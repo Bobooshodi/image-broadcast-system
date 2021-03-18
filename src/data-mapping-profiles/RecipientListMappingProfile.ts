@@ -11,6 +11,14 @@ export class RecipientListMappingProfile extends ProfileBase {
         (m) => m.id,
         mapFrom((src) => src.uuid)
       )
+      .forMember(
+        (m) => m.dateCreated,
+        mapFrom((src) => src.dateCreated)
+      )
+      .forMember(
+        (m) => m.dateUpdated,
+        mapFrom((src) => src.dateUpdated)
+      )
       .reverseMap();
   }
 }

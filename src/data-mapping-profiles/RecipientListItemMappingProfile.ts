@@ -1,10 +1,10 @@
 import { AutoMapper, mapFrom, ProfileBase } from "@nartc/automapper";
-import { RecipientListEntity } from "../entities";
-import { RecipientList } from "../models";
+import { RecipientListItemEntity } from "../entities";
+import { RecipientListItem } from "../models";
 
 export class RecipientListItemMappingProfile extends ProfileBase {
   constructor(mapper: AutoMapper) {
     super();
-    mapper.createMap(RecipientListEntity, RecipientList).reverseMap();
+    mapper.createMap(RecipientListItemEntity, RecipientListItem).reverseMap();
   }
 }
