@@ -1,5 +1,4 @@
 import { inject, injectable } from "inversify";
-import config from "../../config";
 import { AxiosResponse } from "axios";
 import {
   SMSAPIRequest,
@@ -15,7 +14,7 @@ import { SMSGatewayAPIServiceInterface } from "./interfaces/SMSGatewayAPIService
 export class SMSGatewayAPIService implements SMSGatewayAPIServiceInterface {
   private logger;
   private httpService: HTTPRequestInterface;
-  private baseUrl = config.SMS_GATEWAY_HOST;
+  private baseUrl = process.env.SMS_GATEWAY_HOST;
 
   public constructor(
     @inject(ServiceInterfaceTypes.ServiceTypes.loggerService)

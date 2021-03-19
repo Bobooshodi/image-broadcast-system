@@ -1,5 +1,5 @@
 {
-  "name": "image_processor_api",
+  "name": "message-broadcast-api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",

@@ -11,7 +11,6 @@ import {
 import container from "./service-container/inversify.config";
 import { JobServiceInterface } from "./services";
 import { ServiceInterfaceTypes } from "./service-container/ServiceTypes";
-import config from "../config";
 
 const port = 3001;
 const jobService = container.get<JobServiceInterface>(
@@ -20,7 +19,7 @@ const jobService = container.get<JobServiceInterface>(
 
 function connectToDisqueServer() {
   jobService.connect(
-    { host: config.DISQUE_HOST, port: config.DISQUE_PORT },
+    { host: process.env.DISQUE_HOST, port: process.env.DISQUE_PORT },
     (error) => {
       console.error(error);
     },

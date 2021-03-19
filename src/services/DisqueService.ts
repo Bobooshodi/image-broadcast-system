@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import Disqueue from "disqueue-node";
+import { default as Disqueue } from "disqueue-node";
 
 import { ServiceInterfaceTypes } from "../service-container/ServiceTypes";
 import { LoggerServiceInterface } from "./interfaces/LoggerServiceInterface";
@@ -15,7 +15,18 @@ export class DisqueService implements JobServiceInterface {
     logger: LoggerServiceInterface
   ) {
     this.logger = logger.getLogger();
-    this.disque = new Disqueue();
+  }
+  processCheckJob(job: any) {
+    throw new Error("Method not implemented.");
+  }
+  processCheckJobs() {
+    throw new Error("Method not implemented.");
+  }
+  processSendJob(job: any) {
+    throw new Error("Method not implemented.");
+  }
+  processSendJobs() {
+    throw new Error("Method not implemented.");
   }
   async queueJob(
     jobDetails: any,
