@@ -1,8 +1,9 @@
 import { AutoMap } from "@nartc/automapper";
-import { Column, Entity, ManyToMany, JoinTable } from "typeorm";
+import { Column, Entity, ManyToMany, JoinTable, OneToMany } from "typeorm";
 import { ScheduleStatus } from "../enums";
 import { IdentityEntity } from "./common/IdentityEntity";
 import { RecipientListEntity } from "./RecipientListEntity";
+import { ScheduleRecipientStatusEntity } from "./ScheduleRecipientStatusEntity";
 
 @Entity({ name: "schedules" })
 export class ScheduleEntity extends IdentityEntity {
@@ -14,6 +15,10 @@ export class ScheduleEntity extends IdentityEntity {
   @ManyToMany(() => RecipientListEntity)
   @JoinTable()
   recipientsList: RecipientListEntity[];
+
+  @AutoMap()
+  @OneToMany(() => ScheduleRecipientStatusEntity, (status) => status.schedule)
+  recipientStatuses: ScheduleRecipientStatusEntity[];
 
   @AutoMap()
   @Column({ type: "datetime", nullable: false })

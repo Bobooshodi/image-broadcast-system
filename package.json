@@ -7,7 +7,7 @@
     "tsc": "tsc",
     "dev": "nodemon server.js",
     "migrate": "ts-node ./node_modules/typeorm/cli.js migration:run",
-    "migration:create": "ts-node ./node_modules/typeorm/cli.js migration:create -n Initial",
+    "migration:create": "ts-node ./node_modules/typeorm/cli.js migration:generate -n Initial",
     "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'src/tests/**/*.ts'"
   },
   "repository": {

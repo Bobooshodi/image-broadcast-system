@@ -3,7 +3,7 @@ import { Column, Entity, OneToMany } from "typeorm";
 import { IdentityEntity } from "./common/IdentityEntity";
 import { RecipientListItemEntity } from "./RecipientListItemEntity";
 
-@Entity({ name: "recipientLists" })
+@Entity({ name: "recipient_lists" })
 export class RecipientListEntity extends IdentityEntity {
   @AutoMap()
   @Column({ type: "varchar", nullable: false })
