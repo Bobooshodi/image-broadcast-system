@@ -77,11 +77,11 @@ export class DisqueService implements JobServiceInterface {
           (err, JobDetails) => {
             if (err) {
               this.logger.error(
-                `Unable to queue Message Checking for MessageDetails #${recipientMessageStatus.uuid} from Recipient #${recipientMessageStatus.recipient.uuid} for Schedule #${recipientMessageStatus.schedule.uuid}. ERROR REASON ${err}`
+                `Unable to queue Message Checking for MessageDetails #${recipientMessageStatus.uuid}. ERROR REASON ${err}`
               );
             } else {
               this.logger.info(
-                `Message Checking for MessageDetails #${recipientMessageStatus.uuid} for Recipient #${recipientMessageStatus.recipient.uuid} from Schedule #${recipientMessageStatus.schedule.uuid} Queued Again Successfully. JOB DETAILS ${JobDetails}`
+                `Message Checking for MessageDetails #${recipientMessageStatus.uuid} Queued Again Successfully. JOB DETAILS ${JobDetails}`
               );
             }
           }
