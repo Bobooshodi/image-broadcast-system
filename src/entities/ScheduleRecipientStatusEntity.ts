@@ -8,6 +8,14 @@ import { ScheduleEntity } from "./ScheduleEntity";
 @Entity({ name: "schedule_recipient_statuses" })
 export class ScheduleRecipientStatusEntity extends IdentityEntity {
   @AutoMap()
+  @Column({ type: "datetime", nullable: true })
+  deliveryTime: Date;
+
+  @AutoMap()
+  @Column({ type: "varchar", nullable: true })
+  messageIdentifier: string;
+
+  @AutoMap()
   @ManyToOne(
     () => RecipientListItemEntity,
     (recipientListItem) => recipientListItem.statuses,

@@ -1,10 +1,12 @@
+import { ScheduleRecipientStatus } from "../enums";
+
 export class SMSRequestResponse {
   dnis?: string;
   message_id: string;
 }
 
 export class SMSStatusCheckResponse {
-  status: string;
+  status: ScheduleRecipientStatus;
   delivery_time?: string;
 }
 

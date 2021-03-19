@@ -5,4 +5,6 @@ export interface JobServiceInterface {
   processCheckJob(job);
   processSendJobs();
   processCheckJobs();
+  processScheduleJob(job);
+  processScheduleJobs();
 }

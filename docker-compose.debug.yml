@@ -18,6 +18,8 @@ services:
     networks:
       - internal
       - private
+    volumes:
+      - .:/srv/app:rw
 
   db:
     container_name: message-broadcast-api-db
@@ -44,9 +46,65 @@ services:
     image: quay.io/tripviss/tripviss-disque:disque
     networks:
       - private
+    ports:
+      - 7711:7711
     restart: always
     volumes:
       - ./docker/disque/data:/data:rw
+
+  message-admin-worker:
+    build:
+      context: .
+      dockerfile: ./docker/api/Dockerfile
+    environment:
+      - COMMAND=npm run start:message-admin-worker
+    depends_on:
+      db:
+        condition: service_healthy
+    entrypoint: ./docker/api/workers-docker-entrypoint.sh
+    env_file:
+      - ./.env.prod
+    ports:
+      - 3001:3001
+    networks:
+      - internal
+      - private
+
+  message-sender-worker:
+    build:
+      context: .
+      dockerfile: ./docker/api/Dockerfile
+    environment:
+      - COMMAND=npm run start:message-sender-worker
+    depends_on:
+      db:
+        condition: service_healthy
+    entrypoint: ./docker/api/workers-docker-entrypoint.sh
+    env_file:
+      - ./.env.prod
+    ports:
+      - 3002:3002
+    networks:
+      - internal
+      - private
+
+  message-status-checker-worker:
+    build:
+      context: .
+      dockerfile: ./docker/api/Dockerfile
+    environment:
+      - COMMAND=npm run start:message-status-checker-worker
+    depends_on:
+      db:
+        condition: service_healthy
+    entrypoint: ./docker/api/workers-docker-entrypoint.sh
+    env_file:
+      - ./.env.prod
+    ports:
+      - 3003:3003
+    networks:
+      - internal
+      - private
 
 networks:
   internal:

@@ -60,8 +60,14 @@ export class ScheduleService implements ScheduleServiceInterface {
 
     return Mapper.mapArray(allSchedules, Schedule);
   }
-  getById(id: string): Promise<Schedule> {
-    throw new Error("Method not implemented.");
+  async getById(id: string): Promise<Schedule> {
+    const scheduleEntity = await this.repository.findOne({ uuid: id });
+
+    if (!scheduleEntity) {
+      throw new Error(`Schedule with id ${id} not found`);
+    }
+
+    return Mapper.map(scheduleEntity, Schedule);
   }
   async create(model: Schedule): Promise<Schedule> {
     const entity = Mapper.map(model, ScheduleEntity);

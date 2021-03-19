@@ -17,7 +17,7 @@ import container from "./service-container/inversify.config";
 import { JobServiceInterface } from "./services";
 import { ServiceInterfaceTypes } from "./service-container/ServiceTypes";
 
-const port = 3002;
+const port = 3001;
 const jobService = container.get<JobServiceInterface>(
   ServiceInterfaceTypes.ServiceTypes.jobService
 );
@@ -30,7 +30,7 @@ function connectToDisqueServer() {
     },
     () => {
       console.log("Disque Server is Up and Ready to process jobs");
-      jobService.processSendJobs();
+      jobService.processScheduleJobs();
     }
   );
 }

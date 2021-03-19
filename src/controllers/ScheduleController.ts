@@ -10,7 +10,7 @@ import {
   LoggerServiceInterface,
   ScheduleServiceInterface,
 } from "../services";
-import { JobType } from "../enums";
+import { JobQueue, JobType } from "../enums";
 
 const scheduleService = container.get<ScheduleServiceInterface>(
   ServiceInterfaceTypes.ServiceTypes.sheduleService
@@ -40,8 +40,8 @@ export async function create(req: any) {
     );
 
     await jobService.queueJob(
-      JSON.stringify({ scheduleId: schedule.id, type: JobType.SendMessage }),
-      process.env.QUEUE_NAME,
+      JSON.stringify({ scheduleId: schedule.id, type: JobType.ProcessMessage }),
+      JobQueue.ProcessQueue,
       (err, jobDetails) => {
         logger.info(
           `Message Schedule #${schedule.id} queued successfully, JOB DETAILS: ${jobDetails}`

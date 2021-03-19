@@ -1,11 +1,11 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class Initial1616111862192 implements MigrationInterface {
-    name = 'Initial1616111862192'
+export class Initial1616143388459 implements MigrationInterface {
+    name = 'Initial1616143388459'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query("CREATE TABLE `schedules` (`id` int NOT NULL AUTO_INCREMENT, `uuid` varchar(36) NOT NULL, `dateCreated` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), `dateUpdated` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), `message` text NOT NULL, `scheduledTime` datetime NOT NULL, `status` enum ('NEW', 'RUNNING', 'COMPLETED') NOT NULL DEFAULT 'NEW', PRIMARY KEY (`id`)) ENGINE=InnoDB");
-        await queryRunner.query("CREATE TABLE `schedule_recipient_statuses` (`id` int NOT NULL AUTO_INCREMENT, `uuid` varchar(36) NOT NULL, `dateCreated` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), `dateUpdated` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), `status` enum ('SENT', 'ACCEPTD', 'DELIVRD', 'UNDELIV', 'UNKNOWN') NOT NULL DEFAULT 'SENT', `recipientId` int NULL, `scheduleId` int NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB");
+        await queryRunner.query("CREATE TABLE `schedule_recipient_statuses` (`id` int NOT NULL AUTO_INCREMENT, `uuid` varchar(36) NOT NULL, `dateCreated` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), `dateUpdated` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), `deliveryTime` datetime NULL, `messageIdentifier` varchar(255) NULL, `status` enum ('SENT', 'ACCEPTD', 'DELIVRD', 'UNDELIV', 'UNKNOWN') NOT NULL DEFAULT 'SENT', `recipientId` int NULL, `scheduleId` int NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB");
         await queryRunner.query("CREATE TABLE `recipient_list_items` (`id` int NOT NULL AUTO_INCREMENT, `uuid` varchar(36) NOT NULL, `dateCreated` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), `dateUpdated` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), `phoneNumber` varchar(255) NOT NULL, `masterListId` int NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB");
         await queryRunner.query("CREATE TABLE `recipient_lists` (`id` int NOT NULL AUTO_INCREMENT, `uuid` varchar(36) NOT NULL, `dateCreated` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), `dateUpdated` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), `name` varchar(255) NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB");
         await queryRunner.query("CREATE TABLE `schedules_recipients_list_recipient_lists` (`schedulesId` int NOT NULL, `recipientListsId` int NOT NULL, INDEX `IDX_82ff7ae7c389c5b90762f72f20` (`schedulesId`), INDEX `IDX_0557e8106f9f495c5c8a2a24c7` (`recipientListsId`), PRIMARY KEY (`schedulesId`, `recipientListsId`)) ENGINE=InnoDB");

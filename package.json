@@ -6,6 +6,7 @@
   "scripts": {
     "tsc": "tsc",
     "dev": "nodemon server.js",
+    "start:message-admin-worker": "node message-admin-worker",
     "start:message-sender-worker": "node message-sender-worker",
     "start:message-status-checker-worker": "node message-status-checker-worker",
     "migrate": "ts-node ./node_modules/typeorm/cli.js migration:run",
