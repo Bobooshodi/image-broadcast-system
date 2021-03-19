@@ -8,6 +8,7 @@ import { ServiceInterfaceTypes } from "../service-container/ServiceTypes";
 import {
   JobServiceInterface,
   LoggerServiceInterface,
+  ScheduleMessageStatusServiceInterface,
   ScheduleServiceInterface,
 } from "../services";
 import { JobQueue, JobType } from "../enums";
@@ -23,6 +24,10 @@ const jobService = container.get<JobServiceInterface>(
 const logger = container
   .get<LoggerServiceInterface>(ServiceInterfaceTypes.ServiceTypes.loggerService)
   .getLogger();
+
+const messageStatusService = container.get<ScheduleMessageStatusServiceInterface>(
+  ServiceInterfaceTypes.ServiceTypes.schedumeMessageStatusService
+);
 
 export async function create(req: any) {
   try {
@@ -69,6 +74,12 @@ export async function get(req: express.Request) {
   return await scheduleService.getById(id);
 }
 
+export async function getMessageStatuses(req: express.Request) {
+  const { id } = req.params;
+
+  return await messageStatusService.getByScheduleId(id);
+}
+
 export async function getAll(req: express.Request) {
   return await scheduleService.getAllPaginated();
 }
@@ -86,4 +97,5 @@ export default (app: IExpressWithJson) => {
   app.deleteJson("/schedules/:id", remove);
   app.getJson("/schedules", getAll);
   app.getJson("/schedules/:id", get);
+  app.getJson("/schedules/:id/message_statuses", getMessageStatuses);
 };

@@ -13,6 +13,7 @@ import {
   RecipientListItemMappingProfile,
   RecipientListMappingProfile,
   ScheduleMappingProfile,
+  ScheduleRecipientStatusMappingProfile,
 } from "./data-mapping-profiles";
 import container from "./service-container/inversify.config";
 import { JobServiceInterface } from "./services";
@@ -46,6 +47,7 @@ function initializeMappings() {
   Mapper.addProfile(ScheduleMappingProfile);
   Mapper.addProfile(RecipientListMappingProfile);
   Mapper.addProfile(RecipientListItemMappingProfile);
+  Mapper.addProfile(ScheduleRecipientStatusMappingProfile);
 }
 
 function errorHandler(error, req, res, next) {

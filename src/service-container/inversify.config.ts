@@ -10,6 +10,8 @@ import {
   LoggerServiceInterface,
   RecipientListService,
   RecipientListServiceInterface,
+  ScheduleMessageStatusService,
+  ScheduleMessageStatusServiceInterface,
   ScheduleService,
   ScheduleServiceInterface,
   SMSGatewayAPIService,
@@ -45,5 +47,10 @@ container
     ServiceInterfaceTypes.ServiceTypes.sheduleService
   )
   .to(ScheduleService);
+container
+  .bind<ScheduleMessageStatusServiceInterface>(
+    ServiceInterfaceTypes.ServiceTypes.schedumeMessageStatusService
+  )
+  .to(ScheduleMessageStatusService);
 
 export default container;
