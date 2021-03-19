@@ -3,9 +3,9 @@ Requirements
     - Docker Compose
 
 clone the Repo
-    sh "git clone https://github.com/Bobooshodi/image-processor-api.git"
+    sh "git clone https://github.com/Bobooshodi/message-broadcast-api.git"
 
- sh "cd image-processor-api";
+ sh "cd message-broadcast-api";
 
 rename .env.dist or .env.prod to .env and modify .env accordingly
 renamr docker-compose.debug.yaml to docker-compose.yaml and modify accordingly
@@ -18,9 +18,9 @@ renamr docker-compose.debug.yaml to docker-compose.yaml and modify accordingly
     - NPM
 
 clone the Repo
-    sh "git clone https://github.com/Bobooshodi/image-processor-api.git"
+    sh "git clone https://github.com/Bobooshodi/message-broadcast-api.git"
 
- sh "cd image-processor-api";
+ sh "cd message-broadcast-api";
 
  rename .env.dist or .env.prod to .env and modify .env accordingly
 
