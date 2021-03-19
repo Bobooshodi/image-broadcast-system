@@ -6,13 +6,23 @@ import container from "../service-container/inversify.config";
 
 import { ServiceInterfaceTypes } from "../service-container/ServiceTypes";
 import {
+  JobServiceInterface,
+  LoggerServiceInterface,
   ScheduleServiceInterface,
-  SMSGatewayAPIServiceInterface,
 } from "../services";
+import { JobType } from "../enums";
 
 const scheduleService = container.get<ScheduleServiceInterface>(
   ServiceInterfaceTypes.ServiceTypes.sheduleService
 );
+
+const jobService = container.get<JobServiceInterface>(
+  ServiceInterfaceTypes.ServiceTypes.jobService
+);
+
+const logger = container
+  .get<LoggerServiceInterface>(ServiceInterfaceTypes.ServiceTypes.loggerService)
+  .getLogger();
 
 export async function create(req: any) {
   try {
@@ -23,7 +33,23 @@ export async function create(req: any) {
 
     const { message, date, recipientList } = req.body;
 
-    return scheduleService.createAndSave(message, date, recipientList);
+    const schedule = await scheduleService.createAndSave(
+      message,
+      date,
+      recipientList
+    );
+
+    await jobService.queueJob(
+      JSON.stringify({ scheduleId: schedule.id, type: JobType.SendMessage }),
+      process.env.QUEUE_NAME,
+      (err, jobDetails) => {
+        logger.info(
+          `Message Schedule #${schedule.id} queued successfully, JOB DETAILS: ${jobDetails}`
+        );
+      }
+    );
+
+    return { message: "Message scheduled successfully.", schedule };
   } catch (error) {
     console.error(error);
     throw new JsonErrorResponse({ error: "some error occured" });

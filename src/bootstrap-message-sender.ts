@@ -1,6 +1,11 @@
 import { createConnection } from "typeorm";
 import express from "express";
 import withJson from "express-with-json";
+import bodyParser from "body-parser";
+import { pagination } from "typeorm-pagination";
+import cors from "cors";
+import glob from "glob";
+import path from "path";
 import { EntityNotFoundError } from "typeorm/error/EntityNotFoundError";
 import { Mapper } from "@nartc/automapper";
 import {
@@ -24,9 +29,17 @@ function connectToDisqueServer() {
       console.error(error);
     },
     () => {
-      console.log("Disque Server is Up and Ready to accept jobs");
+      console.log("Disque Server is Up and Ready to process jobs");
+      jobService.processSendJobs();
     }
   );
+}
+
+function findAllControllers() {
+  return glob
+    .sync(path.join(__dirname, "controllers/*"), { absolute: true })
+    .map((controllerPath) => require(controllerPath).default)
+    .filter((applyController) => applyController);
 }
 
 function initializeMappings() {
@@ -58,8 +71,13 @@ export function entityNotFoundErrorHandler(error, req, res, next) {
 
 export async function bootstrap() {
   await createConnection();
-  initializeMappings();
   const app = withJson(express());
+  app.use(bodyParser.json());
+  app.use(pagination);
+  app.use(cors());
+
+  initializeMappings();
+  findAllControllers().map((applyController) => applyController(app));
   app.use(entityNotFoundErrorHandler);
   app.use(errorHandler);
 

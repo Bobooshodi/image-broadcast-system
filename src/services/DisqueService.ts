@@ -8,7 +8,10 @@ import { JobServiceInterface } from "./interfaces/JobServiceInterface";
 @injectable()
 export class DisqueService implements JobServiceInterface {
   private logger;
-  private disque;
+  private disque = new Disqueue({
+    host: process.env.DISQUE_HOST,
+    port: process.env.DISQUE_PORT,
+  });
 
   public constructor(
     @inject(ServiceInterfaceTypes.ServiceTypes.loggerService)
@@ -16,18 +19,44 @@ export class DisqueService implements JobServiceInterface {
   ) {
     this.logger = logger.getLogger();
   }
+
   processCheckJob(job: any) {
-    throw new Error("Method not implemented.");
+    const jobBody = JSON.parse(job.body);
+    const { type } = jobBody;
   }
-  processCheckJobs() {
-    throw new Error("Method not implemented.");
+  async processCheckJobs() {
+    while (true) {
+      try {
+        let jobs: any = await this.getJobs(process.env.QUEUE_NAME);
+
+        this.logger.info("Received %s jobs", jobs.length);
+
+        await Promise.all(jobs.map((job) => this.processCheckJob(job)));
+      } catch (error) {
+        this.logger.error("Unable to process job", error);
+      }
+    }
   }
+
   processSendJob(job: any) {
-    throw new Error("Method not implemented.");
+    const jobBody = JSON.parse(job.body);
+    const { type } = jobBody;
   }
-  processSendJobs() {
-    throw new Error("Method not implemented.");
+
+  async processSendJobs() {
+    while (true) {
+      try {
+        let jobs: any = await this.getJobs(process.env.QUEUE_NAME);
+
+        this.logger.info("Received %s jobs", jobs.length);
+
+        await Promise.all(jobs.map((job) => this.processSendJob(job)));
+      } catch (error) {
+        this.logger.error("Unable to process job", error);
+      }
+    }
   }
+
   async queueJob(
     jobDetails: any,
     queue: string,

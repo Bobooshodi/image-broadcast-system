@@ -30,7 +30,7 @@ function findAllControllers() {
     .filter((applyController) => applyController);
 }
 
-function connectToDisqueServer() {
+function connectAndProcessJobs() {
   jobService.connect(
     { host: process.env, port: process.env.DISQUE_PORT },
     (error) => {
@@ -75,8 +75,9 @@ export async function bootstrap() {
   const app = withJson(express());
   app.use(entityNotFoundErrorHandler);
   app.use(errorHandler);
+  findAllControllers().map((applyController) => applyController(app));
 
-  connectToDisqueServer();
+  connectAndProcessJobs();
 
   app.listen(port, () => console.log("Listening on port", port));
 
