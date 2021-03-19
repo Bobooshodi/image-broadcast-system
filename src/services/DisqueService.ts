@@ -32,18 +32,45 @@ export class DisqueService implements JobServiceInterface {
   }
 
   connect(options: any, onError, onSuccess): void {
-    const disqueue = new Disqueue(options);
+    this.disque = new Disqueue(options);
 
-    disqueue.on("error", (error: string) => {
+    this.disque.on("error", (error: string) => {
       this.logger.info("Disque server is unable to connect - %s", error);
 
       onError(error);
     });
 
-    disqueue.on("connected", () => {
+    this.disque.on("connected", () => {
       this.logger.info("Disque server is connected.");
 
       onSuccess();
+    });
+  }
+
+  getJobs(queue: string) {
+    return new Promise((resolve, reject) => {
+      this.disque.getJob({ queue }, (error, jobs) => {
+        if (error) {
+          reject(error);
+        } else {
+          jobs.forEach((job) => {
+            const jobBody = JSON.parse(job.body);
+            const { type } = jobBody;
+
+            this.logger.info("Job received - %s (%s)", type, job.jobId);
+          });
+        }
+
+        resolve(
+          jobs.map((job) => ({
+            ...job,
+            ack: (callback = async () => {}) =>
+              this.disque.fastAck(job.jobId, callback),
+            nack: (callback = () => {}) =>
+              this.disque.nack(job.jobId, callback),
+          }))
+        );
+      });
     });
   }
 }

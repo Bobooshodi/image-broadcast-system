@@ -5,7 +5,10 @@ import { validationResult } from "express-validator";
 import container from "../service-container/inversify.config";
 
 import { ServiceInterfaceTypes } from "../service-container/ServiceTypes";
-import { ScheduleServiceInterface } from "../services";
+import {
+  ScheduleServiceInterface,
+  SMSGatewayAPIServiceInterface,
+} from "../services";
 
 const scheduleService = container.get<ScheduleServiceInterface>(
   ServiceInterfaceTypes.ServiceTypes.sheduleService

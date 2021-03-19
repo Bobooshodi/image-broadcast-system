@@ -3,6 +3,8 @@ import { Container } from "inversify";
 import { ServiceInterfaceTypes } from "./ServiceTypes";
 import {
   DisqueService,
+  HTTPRequestInterface,
+  HttpRequestService,
   JobServiceInterface,
   LoggerService,
   LoggerServiceInterface,
@@ -10,12 +12,24 @@ import {
   RecipientListServiceInterface,
   ScheduleService,
   ScheduleServiceInterface,
+  SMSGatewayAPIService,
+  SMSGatewayAPIServiceInterface,
 } from "../services";
 
 var container = new Container();
 container
   .bind<JobServiceInterface>(ServiceInterfaceTypes.ServiceTypes.jobService)
   .to(DisqueService);
+container
+  .bind<HTTPRequestInterface>(
+    ServiceInterfaceTypes.ServiceTypes.httpRequestService
+  )
+  .to(HttpRequestService);
+container
+  .bind<SMSGatewayAPIServiceInterface>(
+    ServiceInterfaceTypes.ServiceTypes.smsGatewayAPIService
+  )
+  .to(SMSGatewayAPIService);
 container
   .bind<LoggerServiceInterface>(
     ServiceInterfaceTypes.ServiceTypes.loggerService

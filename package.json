@@ -6,6 +6,8 @@
   "scripts": {
     "tsc": "tsc",
     "dev": "nodemon server.js",
+    "start:message-sender-worker": "node message-sender-worker",
+    "start:message-status-checker-worker": "node message-status-checker-worker",
     "migrate": "ts-node ./node_modules/typeorm/cli.js migration:run",
     "migration:create": "ts-node ./node_modules/typeorm/cli.js migration:generate -n Initial",
     "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'src/tests/**/*.ts'"
@@ -22,6 +24,7 @@
   "homepage": "https://github.com/Bobooshodi/image-processor-api#readme",
   "dependencies": {
     "@nartc/automapper": "^7.0.4",
+    "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "cloudinary": "^1.23.0",
     "cors": "^2.8.5",
