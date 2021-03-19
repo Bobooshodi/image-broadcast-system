@@ -1,0 +1,6 @@
+node_modules/
+.vscode/
+.env
+docker-compose.yml
+docker/db/data/
+docker/disque/data/

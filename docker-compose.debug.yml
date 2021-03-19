@@ -1,0 +1,113 @@
+version: "3.4"
+
+services:
+  api:
+    image: message-broadcast-api
+    depends_on:
+      db:
+        condition: service_healthy
+    build:
+      context: .
+      dockerfile: ./docker/api/Dockerfile
+    environment:
+      NODE_ENV: development
+    env_file:
+      - ./.env.prod
+    ports:
+      - 3000:3000
+    networks:
+      - internal
+      - private
+    volumes:
+      - .:/srv/app:rw
+
+  db:
+    container_name: message-broadcast-api-db
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      - ./docker/db/data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    networks:
+      - internal
+    ports:
+      - 3389:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: 72f388370638f212
+      MYSQL_DATABASE: message_broadcast_api
+      MYSQL_USER: message_broadcast_api_user
+      MYSQL_PASSWORD: 2c494db14dbb7aa9
+
+  disque:
+    image: quay.io/tripviss/tripviss-disque:disque
+    networks:
+      - private
+    ports:
+      - 7711:7711
+    restart: always
+    volumes:
+      - ./docker/disque/data:/data:rw
+
+  message-admin-worker:
+    build:
+      context: .
+      dockerfile: ./docker/api/Dockerfile
+    environment:
+      - COMMAND=npm run start:message-admin-worker
+    depends_on:
+      db:
+        condition: service_healthy
+    entrypoint: ./docker/api/workers-docker-entrypoint.sh
+    env_file:
+      - ./.env.prod
+    ports:
+      - 3001:3001
+    networks:
+      - internal
+      - private
+
+  message-sender-worker:
+    build:
+      context: .
+      dockerfile: ./docker/api/Dockerfile
+    environment:
+      - COMMAND=npm run start:message-sender-worker
+    depends_on:
+      db:
+        condition: service_healthy
+    entrypoint: ./docker/api/workers-docker-entrypoint.sh
+    env_file:
+      - ./.env.prod
+    ports:
+      - 3002:3002
+    networks:
+      - internal
+      - private
+
+  message-status-checker-worker:
+    build:
+      context: .
+      dockerfile: ./docker/api/Dockerfile
+    environment:
+      - COMMAND=npm run start:message-status-checker-worker
+    depends_on:
+      db:
+        condition: service_healthy
+    entrypoint: ./docker/api/workers-docker-entrypoint.sh
+    env_file:
+      - ./.env.prod
+    ports:
+      - 3003:3003
+    networks:
+      - internal
+      - private
+
+networks:
+  internal:
+    external: false
+  private:
+    external: true
